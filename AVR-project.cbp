@@ -17,7 +17,7 @@
 					<Add option="-D__AVR_ATmega88PA__" />
 				</Compiler>
 				<Environment>
-					<Variable name="LFUSE" value="0xEF" />
+					<Variable name="FUSES" value="-U lfuse:w:0xEF:m" />
 					<Variable name="MCU" value="atmega88p" />
 				</Environment>
 			</Target>
@@ -32,7 +32,7 @@
 					<Add option="-D__AVR_ATmega328P__" />
 				</Compiler>
 				<Environment>
-					<Variable name="LFUSE" value="0xDA" />
+					<Variable name="FUSES" value="-U lfuse:w:0xDA:m" />
 					<Variable name="MCU" value="atmega328p" />
 				</Environment>
 			</Target>
