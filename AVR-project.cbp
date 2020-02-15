@@ -105,6 +105,8 @@
 		</ExtraCommands>
 		<Unit filename="include/config.h" />
 		<Unit filename="include/version.h" />
+		<Unit filename="lib/avr-debug/RAM_guard.cpp" />
+		<Unit filename="lib/avr-debug/RAM_guard.h" />
 		<Unit filename="lib/avr-debug/debug.cpp" />
 		<Unit filename="lib/avr-debug/debug.h" />
 		<Unit filename="lib/avr-debug/debug_def.h" />
