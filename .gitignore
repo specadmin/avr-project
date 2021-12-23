@@ -1,5 +1,4 @@
-/.project
-/bin
+/output
 *.save
 *.ii
 *.o

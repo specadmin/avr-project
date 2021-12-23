@@ -26,7 +26,8 @@ ASM_FILE=$(OUTPUT_DIR)/$(PROJECT_NAME).asm
 HEX_FILE=$(OUTPUT_DIR)/$(PROJECT_NAME).hex
 DUMP_FILE=$(OUTPUT_DIR)/$(PROJECT_NAME).dump
 
-all: before $(OBJECTS) $(OUTPUT_FILENAME) after
+ATmega8: configure $(OBJECTS) $(OUTPUT_FILENAME) post_build
+ATmega88: configure $(OBJECTS) $(OUTPUT_FILENAME) post_build
 
 %.o: %.cpp
 	$(CC) -c $(CFLAGS) $(INCLUDES) $(DEFS) $< -o $@
@@ -34,14 +35,21 @@ all: before $(OBJECTS) $(OUTPUT_FILENAME) after
 $(OUTPUT_FILENAME): $(OBJECTS)
 	$(CC) -o $(OUTPUT_FILENAME) $(OBJECTS) $(LD_FLAGS) -mmcu=$(MCU) $(LD_LIBS) -Wl,-Map=$(MAP_FILE)
 
-before:
+.PHONY: clean configure post_build
+clean:
+	rm -rf $(OBJECTS) 
+	rm -f `find . -name '*.ii'`
+	rm -f `find . -name '*.s'`
 	rm -f $(MAP_FILE)
 	rm -f $(HEX_FILE)
 	rm -f $(ASM_FILE)
 	rm -f $(DUMP_FILE)
 
-after: $(OUTPUT_FILENAME)
-	avr-objdump -dS $(OUTPUT_FILENAME) > $(ASM_FILE) 
+configure:
+	CPU=mega8
+
+post_build: $(OUTPUT_FILENAME)
+	avr-objdump -dS $(OUTPUT_FILENAME) > $(ASM_FILE)
 	avr-strip --strip-debug -R .comment $(OUTPUT_FILENAME)
 	avr-objcopy -R .eeprom -R .fuse -R .lock -R .signature -O ihex $(OUTPUT_FILENAME) $(HEX_FILE)
 	avr-objdump -xC $(OUTPUT_FILENAME) > $(DUMP_FILE)
@@ -52,11 +60,6 @@ after: $(OUTPUT_FILENAME)
 	avr-size -C --mcu=$(MCU) -d $(OUTPUT_FILENAME)
 	mv $(OUTPUT_DIR)/.text $(MAP_FILE)
 	rm -f $(OUTPUT_FILENAME) $(DUMP_FILE)
-	
-.PHONY clean:
-	rm -rf $(OBJECTS) 
-	rm -f `find . -name '*.ii'`
-	rm -f `find . -name '*.s'`
 
 install: $(HEX_FILE)
 	avrdude -p $(MCU) -c $(ADAPTER) -V -U flash:w:$(HEX_FILE)

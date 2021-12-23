@@ -7,7 +7,7 @@
 		<Option compiler="avr-gcc" />
 		<Build>
 			<Target title="ATmega88pa">
-				<Option output="bin/$(PROJECTNAME).elf" prefix_auto="1" extension_auto="0" />
+				<Option output="output/$(PROJECTNAME).elf" prefix_auto="1" extension_auto="0" />
 				<Option working_dir="" />
 				<Option object_output="." />
 				<Option type="5" />
@@ -22,7 +22,7 @@
 				</Environment>
 			</Target>
 			<Target title="ATmega328p">
-				<Option output="bin/$(PROJECTNAME).elf" prefix_auto="1" extension_auto="0" />
+				<Option output="output/$(PROJECTNAME).elf" prefix_auto="1" extension_auto="0" />
 				<Option working_dir="" />
 				<Option object_output="." />
 				<Option type="5" />
@@ -37,7 +37,7 @@
 				</Environment>
 			</Target>
 			<Target title="ATmega32u4">
-				<Option output="bin/$(PROJECTNAME).elf" prefix_auto="1" extension_auto="0" />
+				<Option output="output/$(PROJECTNAME).elf" prefix_auto="1" extension_auto="0" />
 				<Option working_dir="" />
 				<Option object_output="." />
 				<Option type="5" />
@@ -51,7 +51,7 @@
 				</Environment>
 			</Target>
 			<Target title="ATmega1284p">
-				<Option output="bin/$(PROJECTNAME).elf" prefix_auto="1" extension_auto="0" />
+				<Option output="output/$(PROJECTNAME).elf" prefix_auto="1" extension_auto="0" />
 				<Option working_dir="" />
 				<Option object_output="." />
 				<Option type="5" />
@@ -66,6 +66,7 @@
 			</Target>
 			<Environment>
 				<Variable name="ADAPTER" value="usbasp" />
+				<Variable name="ADAPTER_PORT" value="" />
 			</Environment>
 		</Build>
 		<Compiler>
@@ -90,7 +91,6 @@
 			<Add library="$MCU" />
 		</Linker>
 		<ExtraCommands>
-			<Add before="scripts/inc_version.sh" />
 			<Add after="avr-objdump -dS $(TARGET_OUTPUT_FILE) &gt; $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).asm" />
 			<Add after="avr-strip --strip-debug -R .comment $(TARGET_OUTPUT_FILE)" />
 			<Add after="# avr-objcopy -j .eeprom --change-section-lma .eeprom=0 -O ihex $(TARGET_OUTPUT_FILE) $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).eep" />
@@ -99,17 +99,9 @@
 			<Add after='grep -m1 &quot;.text  &quot; $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).map &gt; $(TARGET_OUTPUT_DIR).text' />
 			<Add after='grep -A 35 &quot;00000000&quot; $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).asm &gt;&gt; $(TARGET_OUTPUT_DIR).text' />
 			<Add after='grep &quot;F .text&quot; $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).dump | sort &gt;&gt; $(TARGET_OUTPUT_DIR).text' />
-			<Add after="pwd" />
-			<Add after="avr-size -dBt --common `find . -name &apos;*.o&apos;`" />
 			<Add after="avr-size -C --mcu=$(MCU) -d $(TARGET_OUTPUT_FILE)" />
 		</ExtraCommands>
 		<Unit filename="include/config.h" />
-		<Unit filename="include/version.h" />
-		<Unit filename="lib/avr-debug/RAM_guard.cpp" />
-		<Unit filename="lib/avr-debug/RAM_guard.h" />
-		<Unit filename="lib/avr-debug/debug.cpp" />
-		<Unit filename="lib/avr-debug/debug.h" />
-		<Unit filename="lib/avr-debug/debug_def.h" />
 		<Unit filename="lib/avr-misc/avr-common.h" />
 		<Unit filename="lib/avr-misc/avr-delay.h" />
 		<Unit filename="lib/avr-misc/avr-interrupts.h" />
@@ -117,10 +109,7 @@
 		<Unit filename="lib/avr-misc/avr-misc.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
-			<code_completion />
-			<envvars />
 			<lib_finder disable_auto="1" />
-			<debugger />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
